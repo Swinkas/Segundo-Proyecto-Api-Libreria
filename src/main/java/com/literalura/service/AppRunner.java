@@ -87,15 +87,35 @@ public class AppRunner implements CommandLineRunner {
                         librosPorIdioma.forEach(System.out::println);
                     }
                     break;
-                case 4:
-                    List<Author> autores = bookService.obtenerTodosLosAutores();
+                case 4: {
+                    System.out.println("Ingrese el año:");
 
-                    if (autores.isEmpty()) {
-                        System.out.println("No hay autores registrados.");
-                    } else {
-                        autores.forEach(System.out::println);
+                    try {
+                        int anio = Integer.parseInt(scanner.nextLine());
+
+                        if (anio < 0) {
+                            System.out.println("El año no puede ser negativo.");
+                            break;
+                        }
+
+                        var autores = bookService.obtenerAutoresVivosEnAnio(anio);
+
+                        if (autores.isEmpty()) {
+                            System.out.println("No hay autores vivos en ese año.");
+                        } else {
+                            autores.forEach(autor -> {
+                                System.out.println("Autor: " + autor.getName());
+                                System.out.println("Nacimiento: " + autor.getBirthYear());
+                                System.out.println("Fallecimiento: " + autor.getDeathYear());
+                                System.out.println("----------------------");
+                            });
+                        }
+
+                    } catch (NumberFormatException e) {
+                        System.out.println("Debe ingresar un número válido.");
                     }
-                    break;
+                }
+
                 case 5:
                     System.out.println("Ingrese el año:");
                     Integer anio = Integer.parseInt(scanner.nextLine());
